@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "struts-2.5.dtd"> 
+
+<struts>
+	<package name="default" extends="struts-default">
+
+		<!-- Trang chào mừng -->
+		<action name="login" class="com.example.action.LoginAction">
+			<result name="success">/home.jsp</result>  <!-- Dùng Dispatcher -->
+			<result name="input">/login.jsp</result>
+		</action>
+
+		<!-- Xử lý đăng bài -->
+		<action name="createPost" class="com.example.action.CreatePostAction">
+			<result name="success">/home.jsp</result> <!-- Không redirect -->
+			<result name="input">/createPost.jsp</result>
+			<result name="error">/createPost.jsp</result>
+			<result name="login">/login.jsp</result>
+		</action>
+
+		<!-- Action hiển thị trang home -->
+		<action name="home" class="com.example.action.HomeAction">
+			<result>/home.jsp</result>
+		</action>
+
+		<!-- Đăng xuất -->
+		<action name="logout" class="com.example.action.LogoutAction">
+			<result name="success">/login.jsp</result> <!-- Không cần redirect -->
+		</action>
+
+	</package>
+</struts>
