@@ -67,18 +67,26 @@
     <h2>Danh sách bài viết</h2>
     
     <s:if test="%{#session.posts != null && #session.posts.size() > 0}">
-        <s:iterator value="#session.posts">
-            <div>
-                <h3><s:property value="title"/></h3>
-                <p><s:property value="body"/></p>
-                <small>Đăng bởi: <s:property value="username"/> | Ngày: <s:property value="createdAt"/></small>
-            </div>
-            <hr>
-        </s:iterator>
-    </s:if>
+		<s:iterator value="#session.posts">
+			<div>
+				<h3>
+					<s:property value="title" />
+				</h3>
+				<p>
+					<s:property value="body" />
+				</p>
+				<small>Đăng bởi: <s:property value="username" /> | Ngày: <s:property value="createdAt" /></small> 
+				<br> 
+				<a href="deletePost.action?id=<s:property value="id"/>"  onclick="return confirm('Bạn có chắc muốn xóa bài viết này không?')">🗑 Xóa</a>
+
+			</div>
+			<hr>
+		</s:iterator>
+
+	</s:if>
 
     <s:else>
-        <p>Chưa có bài viết nào.</p>
+        <p>Thêm 1 bài viết để xem thêm bài viết khác!!!</p>
     </s:else>
 
 </body>
