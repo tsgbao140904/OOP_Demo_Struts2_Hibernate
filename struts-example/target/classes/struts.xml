@@ -27,6 +27,9 @@
 			<result name="login">/login.jsp</result>
 		</action>
 
+		<!-- Xử lý xóa bài -->
+		<action name="deletePost" class="com.example.action.HomeAction" method="deletePost"/>
+
 		<!-- Action hiển thị trang home -->
 		<action name="home" class="com.example.action.HomeAction">
 			<result>/home.jsp</result>

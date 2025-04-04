@@ -1,56 +1,52 @@
 package com.example.model;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Entity
+@Table(name = "posts")
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "body", nullable = false)
     private String body;
-    private String username;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    // Getter và Setter cho id
-    public int getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    // Getters & Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    // Getter và Setter cho title
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getBody() { return body; }
+    public void setBody(String body) { this.body = body; }
 
-    // Getter và Setter cho body
-    public String getBody() {
-        return body;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 
-    // Getter và Setter cho username
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    // Để tương thích với JSP hiện tại
     public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    // Getter và Setter cho createdAt
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+        return user != null ? user.getUsername() : null;
     }
 }

@@ -1,77 +1,48 @@
 package com.example.action;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.example.util.DBConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.example.model.User;
 import org.apache.struts2.ServletActionContext;
+import com.example.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import javax.servlet.http.HttpSession;
 
 public class LoginAction extends ActionSupport {
     private static final long serialVersionUID = 1L;
-
     private String username;
     private String password;
 
     public String execute() {
-        if (authenticate(username, password)) {
-            HttpSession session = ServletActionContext.getRequest().getSession();
-            session.setAttribute("username", username);
-			/* return SUCCESS; */
-            try {
-                HttpServletResponse response = ServletActionContext.getResponse();
-                response.sendRedirect("home.jsp");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return NONE;
-        } else {
-			/*
-			 * addActionError("Tên đăng nhập hoặc mật khẩu không đúng."); return INPUT;
-			 */
-        	try {
-        	    HttpServletResponse response = ServletActionContext.getResponse();
-        	    response.sendRedirect("error.jsp");
-        	} catch (Exception e) {
-        	    e.printStackTrace();
-        	}
-        	return NONE;
+        Session hibernateSession = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = hibernateSession.beginTransaction();
 
-        }
-    }
+        try {
+            User user = (User) hibernateSession.createQuery("FROM User WHERE username = :username AND password = :password")
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .uniqueResult();
 
-    private boolean authenticate(String username, String password) {
-        if (password == null || password.trim().isEmpty()) {
-            System.out.println("Mật khẩu rỗng hoặc null");
-            return false;
-        }
-
-        System.out.println("Đăng nhập với: " + username + " | Mật khẩu: " + password);
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username=? AND password=?")) {
-            
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                System.out.println("Đăng nhập thành công!");
-                return true;
+            if (user != null) {
+                HttpSession session = ServletActionContext.getRequest().getSession();
+                session.setAttribute("username", username);
+                tx.commit();
+                ServletActionContext.getResponse().sendRedirect("home.jsp");
+                return NONE;
             } else {
-                System.out.println("Sai tài khoản hoặc mật khẩu.");
-                return false;
+                tx.commit();
+                ServletActionContext.getResponse().sendRedirect("error.jsp");
+                return NONE;
             }
         } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
-            return false;
+            return ERROR;
         }
     }
 
+    // Getters & Setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 

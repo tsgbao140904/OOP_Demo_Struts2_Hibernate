@@ -1,0 +1,30 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Cấu hình kết nối cơ sở dữ liệu -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/social_network?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">01218923570Aa</property>
+
+        <!-- Cấu hình dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <!-- Tự động tạo bảng nếu cần -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Hiển thị câu lệnh SQL -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Quản lý transaction -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!-- Ánh xạ các lớp entity -->
+        <mapping class="com.example.model.User"/>
+        <mapping class="com.example.model.Post"/>
+    </session-factory>
+</hibernate-configuration>

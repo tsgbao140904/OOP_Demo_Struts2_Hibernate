@@ -1,11 +1,23 @@
 package com.example.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "role", nullable = false)
     private String role;
-    
+
     public User() {}
 
     public User(String username, String password, String role) {
@@ -14,6 +26,7 @@ public class User {
         this.role = role;
     }
 
+    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
